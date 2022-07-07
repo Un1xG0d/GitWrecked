@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GitWrecked</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport">
+  <link href="http://fonts.cdnfonts.com/css/corbel" rel="stylesheet">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <br>
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <h1 class="display-4">Discovered secrets: ###SECRETS_COUNT###</h1>
+            <b>Repository:</b> <a href="###REPO_URL###">###REPO_URL###</a>
+            <br>
+            <b>Last scan:</b> ###SCAN_TIMESTAMP###
+          </div>
+        </div>
+        <br>
+        <div class="accordion" id="secretsAccordion">
+          ###SECRETS_ACCORDION_CONTENT###
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/jquery-3.6.0.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+</body>
+</html>

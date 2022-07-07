@@ -1,0 +1,9 @@
+.card-body {
+	overflow-wrap: normal;
+	overflow-x: scroll;
+}
+
+.jumbotron {
+	margin-bottom: 0;
+	padding: 2rem 0;
+}

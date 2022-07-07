@@ -1,1 +1,3 @@
+reports/css/** linguist-vendored=true
+reports/js/** linguist-vendored=true
 tests/** linguist-vendored=true

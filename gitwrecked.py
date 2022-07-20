@@ -1,3 +1,4 @@
+import argparse
 import io
 import json
 import requests
@@ -8,8 +9,9 @@ from datetime import datetime
 from playsound import playsound
 from truffleHog import truffleHog
 
-def collect_urls():
-	github_topic = "api"
+def collect_urls(github_topic):
+	if not github_topic:
+		github_topic = "api"
 	page = requests.get("https://github.com/topics/" + github_topic + "?o=desc&s=updated")
 	soup = BeautifulSoup(page.content, "html.parser")
 	links = [a.get("href") for a in soup.findAll("a", {"class":"text-bold wb-break-word"})]
@@ -99,9 +101,13 @@ def scan_repo(repo_url):
 		return secrets
 
 def main():
+	parser = argparse.ArgumentParser(description="Scan recent GitHub commits and generate a report on any leaked secrets.")
+	parser.add_argument("-t", "--topic", help="the GitHub topic to search for")
+	args = parser.parse_args()
+
 	while True:
 		scanned_repos = load_scanned_repos()
-		repo_urls = collect_urls()
+		repo_urls = collect_urls(args.topic)
 		print(str(repo_urls) + "\n")
 		for repo_url in repo_urls:
 			if repo_url not in scanned_repos:

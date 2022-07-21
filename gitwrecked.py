@@ -76,6 +76,20 @@ def load_scanned_repos():
 	f.close()
 	return scanned_repos
 
+def reset_scanned_repos():
+	now = datetime.now().timestamp()
+	with open("reset.log", "r+") as reset_file:
+		reset_timestamp = float(reset_file.read())
+		print("[!] Seconds since last reset: " + str(now - reset_timestamp))
+		if now - reset_timestamp > 86400:
+			scanned_repos_file = open("scanned_repos.txt", "w")
+			scanned_repos_file.write("")
+			scanned_repos_file.close()
+			reset_file.seek(0)
+			reset_file.write(str(now))
+			reset_file.truncate()
+			print("[!] The list of scanned repos has been reset.")
+
 def save_scanned_repo(repo_url):
 	f = open("scanned_repos.txt", "a")
 	f.write(repo_url + "\n")
@@ -136,7 +150,8 @@ def main():
 				generate_report(repo_url)
 			else:
 				print("[X] Already scanned repo: " + repo_url)
-		print("[!] Sleeping for 15 minutes.")
-		time.sleep(900)
+		reset_scanned_repos()
+		print("[!] Sleeping for 30 minutes.")
+		time.sleep(1800)
 
 main()

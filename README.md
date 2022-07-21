@@ -4,6 +4,7 @@ Scan recent GitHub commits and generate a report on any leaked secrets.
 ## Setup
 ```
 pip3 install -r requirements.txt
+touch reset.log
 touch scanned_repos.txt
 ```
 

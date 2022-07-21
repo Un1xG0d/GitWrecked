@@ -9,9 +9,19 @@ from datetime import datetime
 from playsound import playsound
 from truffleHog import truffleHog
 
+def collect_all_urls():
+	all_links = []
+	topics = ["3D", "Ajax", "Algorithm", "Amp", "Android", "Angular", "Ansible", "API", "Arduino", "ASP.NET", "Atom", "Awesome Lists", "Amazon Web Services", "Azure", "Babel", "Bash", "Bitcoin", "Bootstrap", "Bot", "C", "Chrome", "Chrome extension", "Command line interface", "Clojure", "Code quality", "Code review", "Compiler", "Continuous integration", "COVID-19", "C++", "Cryptocurrency", "Crystal", "C#", "CSS", "Data structures", "Data visualization", "Database", "Deep learning", "Dependency management", "Deployment", "Django", "Docker", "Documentation", ".NET", "Electron", "Elixir", "Emacs", "Ember", "Emoji", "Emulator", "ESLint", "Ethereum", "Express", "Firebase", "Firefox", "Flask", "Font", "Framework", "Front end", "Game engine", "Git", "GitHub API", "Go", "Google", "Gradle", "GraphQL", "Gulp", "Hacktoberfest", "Haskell", "Homebrew", "Homebridge", "HTML", "HTTP", "Icon font", "iOS", "IPFS", "Java", "JavaScript", "Jekyll", "jQuery", "JSON", "The Julia Language", "Jupyter Notebook", "Koa", "Kotlin", "Kubernetes", "Laravel", "LaTeX", "Library", "Linux", "Localization", "Lua", "Machine learning", "macOS", "Markdown", "Mastodon", "Material design", "MATLAB", "Maven", "Minecraft", "Mobile", "Monero", "MongoDB", "Mongoose", "Monitoring", "MvvmCross", "MySQL", "NativeScript", "Nim", "Natural language processing", "Node.js", "NoSQL", "npm", "Objective-C", "OpenGL", "Operating system", "P2P", "Package manager", "Parsing", "Perl", "Phaser", "PHP", "PICO-8", "Pixel Art", "PostgreSQL", "Project management", "Publishing", "PWA", "Python", "Qt", "R", "Rails", "Raspberry Pi", "Ratchet", "React", "React Native", "ReactiveUI", "Redux", "REST API", "Ruby", "Rust", "Sass", "Scala", "scikit-learn", "Software-defined networking", "Security", "Server", "Serverless", "Shell", "Sketch", "SpaceVim", "Spring Boot", "SQL", "Storybook", "Support", "Swift", "Symfony", "Telegram", "Tensorflow", "Terminal", "Terraform", "Testing", "Twitter", "TypeScript", "Ubuntu", "Unity", "Unreal Engine", "Vagrant", "Vim", "Virtual reality", "Vue.js", "Wagtail", "Web Components", "Web app", "Webpack", "Windows", "WordPlate", "WordPress", "Xamarin", "XML"]
+	for github_topic in topics:
+		print("[!] Gathering URLs for topic: " + github_topic)
+		page = requests.get("https://github.com/topics/" + github_topic + "?o=desc&s=updated")
+		soup = BeautifulSoup(page.content, "html.parser")
+		links = [a.get("href") for a in soup.findAll("a", {"class":"text-bold wb-break-word"})]
+		for url in links:
+			all_links.append("https://github.com" + url)
+	return all_links
+
 def collect_urls(github_topic):
-	if not github_topic:
-		github_topic = "api"
 	page = requests.get("https://github.com/topics/" + github_topic + "?o=desc&s=updated")
 	soup = BeautifulSoup(page.content, "html.parser")
 	links = [a.get("href") for a in soup.findAll("a", {"class":"text-bold wb-break-word"})]
@@ -106,9 +116,14 @@ def main():
 	args = parser.parse_args()
 
 	while True:
-		scanned_repos = load_scanned_repos()
-		repo_urls = collect_urls(args.topic)
+		if args.topic == "all" or not args.topic:
+			repo_urls = collect_all_urls()
+		else:
+			repo_urls = collect_urls(args.topic)
+
 		print(str(repo_urls) + "\n")
+		scanned_repos = load_scanned_repos()
+
 		for repo_url in repo_urls:
 			if repo_url not in scanned_repos:
 				print("[!] Scanning repo: " + repo_url)

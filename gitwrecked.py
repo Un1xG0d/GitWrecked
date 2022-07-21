@@ -40,11 +40,11 @@ def generate_report(repo_url):
 
 	secrets = scan_repo(repo_url)
 
-	report_html = report_html.replace("###REPO_URL###", repo_url)
-	report_html = report_html.replace("###SECRETS_COUNT###", str(len(secrets)))
-	report_html = report_html.replace("###SCAN_TIMESTAMP###", timestamp)
-
 	if len(secrets) != 0:
+		report_html = report_html.replace("###REPO_URL###", repo_url)
+		report_html = report_html.replace("###SECRETS_COUNT###", str(len(secrets)))
+		report_html = report_html.replace("###SCAN_TIMESTAMP###", timestamp)
+
 		accordion_html = ""
 		for secret in secrets:
 			idx = secrets.index(secret) + 1
